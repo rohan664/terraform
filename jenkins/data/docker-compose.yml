@@ -1,0 +1,31 @@
+version: '3.7'
+networks:
+  ci:
+    driver: bridge
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    hostname: jenkins
+    container_name: jenkins
+    networks:
+      - ci
+    ports:
+      - "80:8080"
+    environment:
+      - JENKINS_URL=${jenkins_url}
+      - ADMIN_PASSWORD=${admin_password}
+      - GIT_USER=${git_user}
+      - GIT_EMAIL=${git_email}
+      - GITHUB_USERNAME=${github_username}
+      - GITHUB_PASSWORD=${github_password}
+      - GITHUB_API_TOKEN=${github_api_token}
+      - SEED_JOB_REPO_URL=${seed_job_repo_url}
+      - SEED_JOB_JENKINS_FILE=${seed_job_jenkins_file}
+      - SEED_JOB_REPO_BRANCH=${seed_job_repo_branch}
+      - CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs/casc.yaml
+      - CASC_JENKINS_SECRETS=/var/jenkins_home/casc_configs/casc-secrets.yaml
+    volumes:
+      - /home/${instance_user}/casc-secrets.yaml:/var/jenkins_home/casc_configs/casc-secrets.yaml
+      - /home/${instance_user}/casc.yaml:/var/jenkins_home/casc_configs/casc.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
