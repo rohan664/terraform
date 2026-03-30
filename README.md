@@ -8,6 +8,7 @@ The infrastructure is deployed in the **us-east-1 region** across two Availabili
 - us-east-1b 
 
 ## Architecture Diagram
+<img width="1607" height="1198" alt="diagram-export-3-30-2026-10_56_08-AM" src="https://github.com/user-attachments/assets/42e21b0c-1687-4c08-8538-b86f8345ec03" />
 
 
 ---
