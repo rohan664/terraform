@@ -143,3 +143,8 @@ This project uses a **modular Terraform architecture**:
 - Docker (Containerization)
 - Jenkins (CI/CD)
 - CASC (Configuration as Code)
+  
+---
+## Self Assessment
+<img width="681" height="405" alt="image" src="https://github.com/user-attachments/assets/dbb5ac77-5b18-4c2b-a3ec-a58e78679aa4" />
+
