@@ -1,0 +1,36 @@
+{
+  "folders": [
+    {
+      "path": "build",
+      "description": ""
+    },
+    {
+      "path": "build/qa",
+      "description": ""
+    },
+    {
+      "path": "build/qa/frontend",
+      "description": ""
+    },
+    {
+      "path": "build/qa/backend",
+      "description": ""
+    },
+    {
+      "path": "deploy",
+      "description": ""
+    },
+    {
+      "path": "deploy/qa",
+      "description": ""
+    },
+    {
+      "path": "deploy/qa/frontend",
+      "description": ""
+    },
+    {
+      "path": "deploy/qa/backend",
+      "description": ""
+    }
+  ]
+}

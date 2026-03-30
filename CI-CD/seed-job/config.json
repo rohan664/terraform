@@ -1,0 +1,7 @@
+{
+  "qa": [ 
+      { "name": "admin", "permissions": ["Discover", "Read", "Build"] },
+      { "name": "devops", "permissions": ["Discover", "Read", "Build"] },
+      { "name": "developer", "permissions": ["Discover", "Read", "Build"] }
+  ]
+}
