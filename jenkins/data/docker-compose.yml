@@ -22,10 +22,8 @@ services:
       - SEED_JOB_REPO_URL=${seed_job_repo_url}
       - SEED_JOB_JENKINS_FILE=${seed_job_jenkins_file}
       - SEED_JOB_REPO_BRANCH=${seed_job_repo_branch}
-      - CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs/casc.yaml
-      - CASC_JENKINS_SECRETS=/var/jenkins_home/casc_configs/casc-secrets.yaml
+      - CASC_JENKINS_CONFIG=/var/jenkins_home/casc_configs/jenkins.yaml
     volumes:
-      - /home/${instance_user}/casc-secrets.yaml:/var/jenkins_home/casc_configs/casc-secrets.yaml
-      - /home/${instance_user}/casc.yaml:/var/jenkins_home/casc_configs/casc.yaml
+      - /home/${instance_user}/jenkins.yaml:/var/jenkins_home/casc_configs/jenkins.yaml
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always

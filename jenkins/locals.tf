@@ -11,9 +11,9 @@ locals {
   github_api_token                = "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"
   admin_password                  = jsondecode(data.aws_secretsmanager_secret_version.qa_jenkins_secrets.secret_string)["jenkins_admin_password"]
   jenkins_domain_name             = "rohandesai.dev"
-  jenkins_seed_job_repo_url       = "https://github.com/tmlconnected/cvp-ci-pipeline.git"
-  jenkins_seed_job_repo_branch    = "master"
-  jenkins_seed_job_jenkins_file   = "seed_pipelines/qa/seed-pipelines.yaml"
+  jenkins_seed_job_repo_url       = "https://github.com/rohan664/terraform.git"
+  jenkins_seed_job_repo_branch    = "main"
+  jenkins_seed_job_jenkins_file   = "CI-CD/seed-job/seed-pipelines.groovy"
   identifier                      = "JENKINS"
   docker_compose = base64encode(templatefile("${path.module}/data/docker-compose.yml", {
     jenkins_url           = "http://${local.jenkins_domain_name}/"
@@ -39,16 +39,13 @@ locals {
     instance_user = local.instance_user
   }))
 
-  casc = base64encode(templatefile("${path.module}/data/casc.yaml", {
-  }))
-
-  cleanup_script = filebase64("${path.module}/data/cleanup.sh")
-
-  jenkins_casc_secrets = base64encode(templatefile("${path.module}/data/casc_secrets.yaml",{
+  jenkins = base64encode(templatefile("${path.module}/data/jenkins.yaml", {
     jenkins_admin_password  = jsondecode(data.aws_secretsmanager_secret_version.qa_jenkins_secrets.secret_string)["jenkins_admin_password"]
     developer_password = jsondecode(data.aws_secretsmanager_secret_version.qa_jenkins_secrets.secret_string)["developer_password"]
     devops_password = jsondecode(data.aws_secretsmanager_secret_version.qa_jenkins_secrets.secret_string)["devops_password"]
   }))
+
+  cleanup_script = filebase64("${path.module}/data/cleanup.sh")
 
   lb_policy_attributes = {
     "Reference-Security-Policy" = "ELBSecurityPolicy-TLS-1-2-2017-01"
@@ -56,8 +53,7 @@ locals {
 
   bootstrap_script = templatefile("${path.module}/data/user-data.sh",{
     instance_user   = local.instance_user
-    casc_secrets    = local.jenkins_casc_secrets
-    casc            = local.casc
+    casc            = local.jenkins
     docker_compose  = local.docker_compose
     startup_script  = local.startup_script
     jenkins_service = local.jenkins_service

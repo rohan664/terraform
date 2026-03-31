@@ -1,0 +1,115 @@
+jenkins:
+  systemMessage: "Jenkins configured via JCasC"
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "${jenkins_admin_password}"
+        - id: "developer"
+          password: "${developer_password}"
+        - id: "devops"
+          password: "${devops_password}"
+        - id: "qa"
+          password: "${devops_password}"
+
+  authorizationStrategy:
+    projectMatrix:
+      entries:
+        - user:
+            name: "admin"
+            permissions:
+              - "Overall/Administer"
+
+        - user:
+            name: "developer"
+            permissions:
+              - "Overall/Read"
+              - "Job/Read"
+              - "Job/Build"
+
+        - user:
+            name: "devops"
+            permissions:
+              - "Overall/Read"
+              - "Job/Read"
+              - "Job/Build"
+              - "Job/Configure"
+
+        - user:
+            name: "qa"
+            permissions:
+              - "Overall/Read"
+              - "Job/Read"
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              id: "github-ci"
+              username: "$${GITHUB_USERNAME}"
+              password: "$${GITHUB_PASSWORD}"
+              scope: GLOBAL
+
+          - string:
+              id: "github-api-token"
+              secret: "$${GITHUB_API_TOKEN}"
+              scope: GLOBAL
+
+unclassified:
+  location:
+    url: "$${JENKINS_URL}"
+
+  gitSCM:
+    globalConfigName: "$${GIT_USER}"
+    globalConfigEmail: "$${GIT_EMAIL}"
+
+  gitHubPluginConfig:
+    configs:
+      - name: "github"
+        credentialsId: "github-ci"
+
+jobs:
+  - script: >
+      pipelineJob('seed-job') {
+        properties {
+          authorizationMatrix {
+            entries {
+              group {
+                name('authenticated')
+                permissions([
+                  "Overall/Read",
+                  "Job/Build",
+                  "Job/Cancel",
+                  "Job/Read"
+                ])
+              }
+            }
+            inheritanceStrategy {
+              nonInheriting()
+            }
+          }
+          githubProjectUrl("$${SEED_JOB_REPO_URL}")
+          pipelineTriggers {
+            triggers {
+              githubPush()
+            }
+          }
+        }
+        definition {
+          cpsScm {
+            scm {
+              git {
+                remote {
+                  credentials('github-ci')
+                  url("$${SEED_JOB_REPO_URL}")
+                }
+                branches("*/$${SEED_JOB_REPO_BRANCH}")
+              }
+            }
+            scriptPath("$${SEED_JOB_JENKINS_FILE}")
+          }
+        }
+      }
